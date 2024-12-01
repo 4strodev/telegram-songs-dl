@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -38,7 +37,7 @@ func (b *Bot) Start() {
 		panic(err)
 	}
 
-	fmt.Println("Starting bot")
+	b.logger.Info("Starting bot")
 	tBot.Start(ctx)
 }
 
