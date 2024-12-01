@@ -1,5 +1,9 @@
 version: '3'
 
+dotenv: ['.env']
+
+vars:
+  imageName: 4strodev/telegram-songs-dl
 
 tasks:
   run:
@@ -15,10 +19,18 @@ tasks:
     cmds:
       - docker compose -f bot/docker-compose.yml build
 
+  bot:remove_builds:
+    cmds:
+      - docker images --format "{{ "{{" }} .Repository {{ "}}" }}:{{ "{{" }} .Tag {{ "}}" }}" | grep "^{{ .imageName }}" | xargs -r docker rmi
+
+  bot:list_builds:
+    cmds:
+      - docker images -f 'reference={{ .imageName }}'
+
   bot:build:
     cmds:
-      - docker build --platform linux/amd64,linux/arm64 -t 4strodev/telegram-songs-dl:{{ .dateTag }} ./bot/
-      - docker tag 4strodev/telegram-songs-dl:{{ .dateTag }} 4strodev/telegram-songs-dl:latest
+      - docker build --platform linux/amd64,linux/arm64 -t {{ .imageName }}:{{ .dateTag }} ./bot/
+      - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
     vars:
       dateTag:
         sh: echo $(date "+%y-%m-%d_%H-%M")
