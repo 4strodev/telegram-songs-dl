@@ -1,0 +1,24 @@
+version: '3'
+
+
+tasks:
+  run:
+    dir: ./bot
+    cmd: go run ./cmd
+    dotenv: ['.env']
+
+  bot:start:
+    cmds:
+      - docker compose -f bot/docker-compose.yml up
+
+  bot:build:compose:
+    cmds:
+      - docker compose -f bot/docker-compose.yml build
+
+  bot:build:
+    cmds:
+      - docker build --platform linux/amd64,linux/arm64 -t 4strodev/telegram-songs-dl:{{ .dateTag }} ./bot/
+      - docker tag 4strodev/telegram-songs-dl:{{ .dateTag }} 4strodev/telegram-songs-dl:latest
+    vars:
+      dateTag:
+        sh: echo $(date "+%y-%m-%d_%H-%M")
