@@ -1,19 +1,29 @@
 package main
 
 import (
-	"os"
+	"log"
 
-	"github.com/4strodev/songs_dl_telegram/internal/songs"
 	"github.com/4strodev/songs_dl_telegram/internal"
+	"github.com/4strodev/songs_dl_telegram/internal/environment"
+	"github.com/4strodev/songs_dl_telegram/internal/songs"
 )
 
+type Config struct {
+	TelegramToken string `env:"TELEGRAM_TOKEN"`
+	SongsFile     string `env:"SONGS_FILE"`
+}
+
 func main() {
-	token := os.Getenv("TELEGRAM_TOKEN")
-	songsFile := os.Getenv("SONGS_FILE")
+	config := Config{}
+	err := environment.LoadEnvironmentVariables(&config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	bot := internal.Bot{
-		Token: token,
+		Token: config.TelegramToken,
 		SongsRepository: songs.SongsRepository{
-			Destination: songsFile,
+			Destination: config.SongsFile,
 		},
 	}
 
