@@ -56,6 +56,11 @@ func (b *Bot) HandleMessage(ctx context.Context, tBot *bot.Bot, update *models.U
 		return
 	}
 
+	_, err = tBot.SendMessage(ctx, &bot.SendMessageParams{
+		ChatID: update.Message.Chat.ID,
+		Text:   "URL saved successfully!",
+	})
+
 	err = b.Downloader.DownloadSong(url)
 	if err != nil {
 		b.logger.Error("error downloading songs {error}", "error", err)
@@ -64,7 +69,7 @@ func (b *Bot) HandleMessage(ctx context.Context, tBot *bot.Bot, update *models.U
 
 	_, err = tBot.SendMessage(ctx, &bot.SendMessageParams{
 		ChatID: update.Message.Chat.ID,
-		Text:   "URL saved successfully!",
+		Text:   "Song downloaded successfully",
 	})
 	if err != nil {
 		b.logger.Error("error sending message to chat {error}", "error", err)
