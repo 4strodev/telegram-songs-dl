@@ -56,7 +56,7 @@ func (b *Bot) HandleMessage(ctx context.Context, tBot *bot.Bot, update *models.U
 		return
 	}
 
-	err = b.Downloader.Download()
+	err = b.Downloader.DownloadSong(url)
 	if err != nil {
 		b.logger.Error("error downloading songs {error}", "error", err)
 		b.writeError(err, ctx, tBot, update)

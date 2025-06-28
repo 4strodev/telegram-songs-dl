@@ -10,9 +10,10 @@ import (
 )
 
 type Config struct {
-	TelegramToken  string `env:"TELEGRAM_TOKEN"`
-	SongsFile      string `env:"SONGS_FILE"`
-	SongsDirectory string `env:"SONGS_DIR"`
+	TelegramToken    string `env:"TELEGRAM_TOKEN"`
+	SongsFile        string `env:"SONGS_FILE"`
+	SongsDirectory   string `env:"SONGS_DIR"`
+	ScriptsDirectory string `env:"SCRIPTS_DIR"`
 }
 
 func main() {
@@ -28,7 +29,7 @@ func main() {
 			Destination: config.SongsFile,
 		},
 		Downloader: services.Downloader{
-			ScriptsFolder: "scripts",
+			ScriptsFolder:  config.ScriptsDirectory,
 			SongsDirectory: config.SongsDirectory,
 		},
 	}

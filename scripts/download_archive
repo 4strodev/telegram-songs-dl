@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+
+yt-dlp -o "$DOWNLOAD_DIR/%(title)s.%(ext)s" \
+    --add-metadata --embed-metadata --format bestaudio \
+    --extract-audio --audio-format wav --audio-quality 0 \
+    --batch-file -
