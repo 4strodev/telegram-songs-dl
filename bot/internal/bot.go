@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/4strodev/songs_dl_telegram/internal/songs"
+	"github.com/4strodev/songs_dl_telegram/services"
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
 )
@@ -17,6 +18,7 @@ type Bot struct {
 	SongsRepository songs.SongsRepository
 	LogHandler      slog.Handler
 	logger          *slog.Logger
+	Downloader      services.Downloader
 }
 
 func (b *Bot) Start() {
@@ -49,17 +51,15 @@ func (b *Bot) HandleMessage(ctx context.Context, tBot *bot.Bot, update *models.U
 
 	err := b.SongsRepository.AddSong(url)
 	if err != nil {
-		message := err.Error()
 		b.logger.Error("error saving url {error}", "error", err)
-		// Send message
-		_, err := tBot.SendMessage(ctx, &bot.SendMessageParams{
-			ChatID: update.Message.Chat.ID,
-			Text:   message,
-		})
-		if err != nil {
-			b.logger.Error("error sending message to chat {error}", "error", err)
-		}
+		b.writeError(err, ctx, tBot, update)
 		return
+	}
+
+	err = b.Downloader.Download()
+	if err != nil {
+		b.logger.Error("error downloading songs {error}", "error", err)
+		b.writeError(err, ctx, tBot, update)
 	}
 
 	_, err = tBot.SendMessage(ctx, &bot.SendMessageParams{
@@ -71,4 +71,16 @@ func (b *Bot) HandleMessage(ctx context.Context, tBot *bot.Bot, update *models.U
 	}
 
 	b.logger.Info("new song saved {url}", "url", url)
+}
+
+func (b *Bot) writeError(err error, ctx context.Context, tBot *bot.Bot, update *models.Update) {
+	message := err.Error()
+	// Send message
+	_, err = tBot.SendMessage(ctx, &bot.SendMessageParams{
+		ChatID: update.Message.Chat.ID,
+		Text:   message,
+	})
+	if err != nil {
+		b.logger.Error("error sending message to chat {error}", "error", err)
+	}
 }
