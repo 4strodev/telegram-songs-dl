@@ -19,11 +19,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Go (for Task install)
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-
       - name: Install Task
         uses: arduino/setup-task@v2
         with:
