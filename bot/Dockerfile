@@ -11,7 +11,9 @@ RUN go mod download
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /go/bin/app /go/src/app/cmd
 
 ## Using distroless images to reduce image size
-FROM gcr.io/distroless/static-debian12:latest
+FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y bash curl && pip install yt-dlp
 
 COPY --from=build /go/bin/app /
 CMD ["/app"]

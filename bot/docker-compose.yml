@@ -1,8 +1,11 @@
 services:
   bot:
-    image: 4strodev/telegram-songs-dl:24-11-30_21-45-amd64
+    image: 4strodev/telegram-songs-dl:25-07-29_18-47
     restart: always
     env_file: .env
+    volumes:
+      - "../scripts:/scripts"
+      - "../songs:/songs"
   ## If you prefer you can set the environment variables directly
   ## on the docker compose environment entry
     #environment:
