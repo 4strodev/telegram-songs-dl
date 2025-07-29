@@ -4,7 +4,6 @@ dotenv: ['.env']
 
 vars:
   imageName: 4strodev/telegram-songs-dl
-  tagFile: tag.txt
 
 tasks:
   run:
@@ -30,29 +29,16 @@ tasks:
 
   docker:build:
     cmds:
-      - echo "{{ .dateTag }}" > {{ .tagFile }}
       - docker buildx build --platform linux/amd64,linux/arm64 -t {{ .imageName }}:{{ .dateTag }} ./bot/
       - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
     vars:
       dateTag:
         sh: echo $(date "+%y-%m-%d_%H-%M")
 
-  docker:clean:
-    cmds:
-      - rm {{ .tagFile }}
-
-  docker:publish:
-    preconditions:
-      - test -f {{ .tagFile }}
-    cmds:
-      - docker push {{ .imageName }}:$(cat {{ .tagFile }})
-      - task docker:clean
-
   docker:publish:ci:
     cmds:
       - echo "{{ .dateTag }}" > {{ .tagFile }}
-      - docker buildx build --platform linux/amd64,linux/arm64 --publish -t {{ .imageName }}:{{ .dateTag }} ./bot/
-      - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
+      - docker buildx build --platform linux/amd64,linux/arm64 --publish {{ .imageName }}:{{ .dateTag }} -t {{ .imageName }}:{{ .dateTag }} ./bot/
     vars:
       dateTag:
         sh: echo $(date "+%y-%m-%d_%H-%M")
