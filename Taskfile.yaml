@@ -37,7 +37,6 @@ tasks:
 
   docker:publish:ci:
     cmds:
-      - echo "{{ .dateTag }}" > {{ .tagFile }}
       - docker buildx build --platform linux/amd64,linux/arm64 --publish {{ .imageName }}:{{ .dateTag }} -t {{ .imageName }}:{{ .dateTag }} ./bot/
     vars:
       dateTag:
