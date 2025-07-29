@@ -1,12 +1,18 @@
 name: Build docker image
 
 on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
   push:
     branches:
       - main
 
 jobs:
   build-and-push:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
