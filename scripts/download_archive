@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+# This script is used to download images sending the songs archive by stdin
+# allowing to avoid to download again a song that was already downloaded
 
 yt-dlp -o "$DOWNLOAD_DIR/%(title)s.%(ext)s" \
     --add-metadata --embed-metadata --format bestaudio \

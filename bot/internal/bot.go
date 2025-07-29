@@ -44,15 +44,9 @@ func (b *Bot) Start() {
 }
 
 func (b *Bot) HandleMessage(ctx context.Context, tBot *bot.Bot, update *models.Update) {
+	var err error
 	url := strings.Trim(update.Message.Text, "\n\t")
 	if url == "" {
-		return
-	}
-
-	err := b.SongsRepository.AddSong(url)
-	if err != nil {
-		b.logger.Error("error saving url {error}", "error", err)
-		b.writeError(err, ctx, tBot, update)
 		return
 	}
 
