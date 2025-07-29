@@ -13,7 +13,7 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o /go/bin/app /go/src/app/cm
 ## Using distroless images to reduce image size
 FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y bash curl && pip install yt-dlp
+RUN apt-get update && apt-get install -y bash curl ffmpeg && pip install yt-dlp
 
 COPY --from=build /go/bin/app /
 CMD ["/app"]
