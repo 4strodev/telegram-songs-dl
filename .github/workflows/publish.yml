@@ -38,5 +38,5 @@ jobs:
 
       - name: Run Task to Build and Push Docker Image
         run: |
-          task docker:build:ci
+          task docker:build
           task docker:publish
