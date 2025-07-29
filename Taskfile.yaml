@@ -37,7 +37,7 @@ tasks:
 
   docker:publish:ci:
     cmds:
-      - docker buildx build --platform linux/amd64,linux/arm64 --publish {{ .imageName }}:{{ .dateTag }} -t {{ .imageName }}:{{ .dateTag }} ./bot/
+      - docker buildx build --platform linux/amd64,linux/arm64 --push -t {{ .imageName }}:{{ .dateTag }} ./bot/
     vars:
       dateTag:
         sh: echo $(date "+%y-%m-%d_%H-%M")
