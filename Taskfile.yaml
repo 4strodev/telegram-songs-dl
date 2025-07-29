@@ -31,7 +31,7 @@ tasks:
   docker:build:
     cmds:
       - echo "{{ .dateTag }}" > {{ .tagFile }}
-      - docker buildx build --platform linux/amd64,linux/arm64 --load -t {{ .imageName }}:{{ .dateTag }} ./bot/
+      - docker buildx build --platform linux/amd64,linux/arm64 -t {{ .imageName }}:{{ .dateTag }} ./bot/
       - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
     vars:
       dateTag:
@@ -47,3 +47,12 @@ tasks:
     cmds:
       - docker push {{ .imageName }}:$(cat {{ .tagFile }})
       - task docker:clean
+
+  docker:publish:ci:
+    cmds:
+      - echo "{{ .dateTag }}" > {{ .tagFile }}
+      - docker buildx build --platform linux/amd64,linux/arm64 --publish -t {{ .imageName }}:{{ .dateTag }} ./bot/
+      - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
+    vars:
+      dateTag:
+        sh: echo $(date "+%y-%m-%d_%H-%M")
