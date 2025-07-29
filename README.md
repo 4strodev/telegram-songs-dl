@@ -1,5 +1,5 @@
 # Telegram songs dl
-I'm starting to mix music and I would like to "automize" songs downloading in a simple way.
+I'm starting to mix music and I would like to "automate" songs downloading in a simple way.
 This is a simple bot to share youtube urls and save my favourite songs.
 
 At this moment it just saves the urls in a file and then with a script I download the songs
