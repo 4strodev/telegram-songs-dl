@@ -31,16 +31,7 @@ tasks:
   docker:build:
     cmds:
       - echo "{{ .dateTag }}" > {{ .tagFile }}
-      - docker build --platform linux/amd64,linux/arm64 -t {{ .imageName }}:{{ .dateTag }} ./bot/
-      - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
-    vars:
-      dateTag:
-        sh: echo $(date "+%y-%m-%d_%H-%M")
-
-  docker:build:ci:
-    cmds:
-      - echo "{{ .dateTag }}" > {{ .tagFile }}
-      - docker buildx --platform linux/amd64,linux/arm64 -t {{ .imageName }}:{{ .dateTag }} ./bot/
+      - docker buildx build --platform linux/amd64,linux/arm64 -t {{ .imageName }}:{{ .dateTag }} ./bot/
       - docker tag {{ .imageName }}:{{ .dateTag }} {{ .imageName }}:latest
     vars:
       dateTag:
